@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace WhatsAppBussinesApi.Dotnet.Structure
+namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
 {
     public interface ITemplateTextMessage
     {
@@ -12,22 +12,22 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
         public TemplateTextMessage()
         {
-            this.type = TypeMessage.template;
+            type = TypeMessage.template;
         }
 
         public TemplateTextMessage(string sender, TemplateData template)
         {
-            this.type = TypeMessage.template;
+            type = TypeMessage.template;
             this.template = template;
-            this.to = sender;
+            to = sender;
         }
 
         public TemplateTextMessage(string sender, string templateName, string lang, List<BaseParameters> parametersBody)
         {
-            this.type = TypeMessage.template;
-            if (this.template is null)
+            type = TypeMessage.template;
+            if (template is null)
             {
-                this.template = new TemplateData()
+                template = new TemplateData()
                 {
                     name = templateName,
                     language = new LanguageCode(lang)
@@ -35,16 +35,16 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
             }
             else
             {
-                this.template.name = templateName;
-                this.template.language = new LanguageCode(lang);
+                template.name = templateName;
+                template.language = new LanguageCode(lang);
             }
 
-            this.template.components.Add(new Component()
+            template.components.Add(new Component()
             {
                 type = "body",
                 parameters = parametersBody,
             });
-            this.to = sender;
+            to = sender;
         }
     }
 
@@ -62,7 +62,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
         public LanguageCode(string lang)
         {
-            this.code = lang;
+            code = lang;
         }
     }
     public class Component
@@ -104,7 +104,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
         public ParameterCurrency(string fallback, string code, decimal amount)
         {
-            this.currency = new Currency(fallback, code, amount);
+            currency = new Currency(fallback, code, amount);
         }
     }
     public class Currency
@@ -118,9 +118,9 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         }
         public Currency(string fallback, string code, decimal amount)
         {
-            this.fallback_value = fallback;
+            fallback_value = fallback;
             this.code = code;
-            this.amount_1000 = amount;
+            amount_1000 = amount;
         }
     }
 
@@ -136,7 +136,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
         public ParameterDateTime(DateTime dateTime, string lang)
         {
-            this.date_time = new Date_Time(dateTime, new CultureInfo(lang));
+            date_time = new Date_Time(dateTime, new CultureInfo(lang));
         }
     }
 
@@ -160,14 +160,14 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
         public Date_Time(DateTime date, CultureInfo culture)
         {
-            this.fallback_value = date.ToString("m", culture);
-            this.day_of_week = (int)date.DayOfWeek;
-            this.calendar = "GREGORIAN";
-            this.hour = date.Hour;
-            this.minute = date.Minute;
-            this.month = date.Month;
-            this.year = date.Year;
-            this.day_of_month = date.Day;
+            fallback_value = date.ToString("m", culture);
+            day_of_week = (int)date.DayOfWeek;
+            calendar = "GREGORIAN";
+            hour = date.Hour;
+            minute = date.Minute;
+            month = date.Month;
+            year = date.Year;
+            day_of_month = date.Day;
         }
     }
 }

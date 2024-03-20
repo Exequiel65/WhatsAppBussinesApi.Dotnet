@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using WhatsAppBussinesApi.Dotnet.Structure;
 
-namespace WhatsAppBussinesApi.Dotnet.WhatsAppBussinesApi
+namespace WhatsAppBussinesApi.Dotnet.Client
 {
     public interface IWhatsAppBusinessClient
     {

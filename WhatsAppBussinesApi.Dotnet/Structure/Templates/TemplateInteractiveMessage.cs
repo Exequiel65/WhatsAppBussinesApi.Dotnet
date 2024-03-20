@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WhatsAppBussinesApi.Dotnet.Structure
+namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
 {
     public class TemplateInteractiveMessage : TemplateTextMessage
     {
@@ -12,7 +12,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         {
             if (buttonComponents != null)
             {
-                this.template.components.AddRange(buttonComponents);
+                template.components.AddRange(buttonComponents);
             }
 
         }
@@ -21,7 +21,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         {
             if (HeaderUrlImage != null)
             {
-                this.template.components.Add(new Component()
+                template.components.Add(new Component()
                 {
                     type = "header",
                     parameters = [new HeaderImageParameter(HeaderUrlImage.ToString())]
@@ -29,7 +29,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
             }
             if (buttonComponents != null)
             {
-                this.template.components.AddRange(buttonComponents);
+                template.components.AddRange(buttonComponents);
             }
 
         }
@@ -37,7 +37,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         {
             if (headerText != null)
             {
-                this.template.components.Add(new Component()
+                template.components.Add(new Component()
                 {
                     type = "header",
                     parameters = [new HeaderTextParameter(headerText)]
@@ -46,7 +46,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
             if (buttonComponents != null)
             {
-                this.template.components.AddRange(buttonComponents);
+                template.components.AddRange(buttonComponents);
             }
 
         }
@@ -55,7 +55,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         {
             if (headerLocationParameters != null)
             {
-                this.template.components.Add(new Component()
+                template.components.Add(new Component()
                 {
                     type = "header",
                     parameters = [new HeaderLocationParameter(headerLocationParameters)]
@@ -64,7 +64,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
             if (buttonComponents != null)
             {
-                this.template.components.AddRange(buttonComponents);
+                template.components.AddRange(buttonComponents);
             }
         }
     }
@@ -83,12 +83,12 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         public QuickReplyButton(string payload, int index = 0)
         {
             this.index = index;
-            this.parameters = new List<BaseParameters> { new QuickReplyParameter(payload) };
+            parameters = new List<BaseParameters> { new QuickReplyParameter(payload) };
         }
         public QuickReplyButton(QuickReplyParameter quickReply, int index = 0)
         {
             this.index = index;
-            this.parameters = new List<BaseParameters> { quickReply };
+            parameters = new List<BaseParameters> { quickReply };
         }
     }
 
@@ -97,14 +97,14 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         public CopyCodeButton(string code, int index = 0)
         {
             this.index = index;
-            this.sub_type = ButtonType.COPY_CODE;
-            this.parameters = new List<BaseParameters> { new CopyCodeParameter(code) };
+            sub_type = ButtonType.COPY_CODE;
+            parameters = new List<BaseParameters> { new CopyCodeParameter(code) };
         }
         public CopyCodeButton(CopyCodeParameter copyCodeParameter, int index = 0)
         {
             this.index = index;
-            this.sub_type = ButtonType.COPY_CODE;
-            this.parameters = new List<BaseParameters> { copyCodeParameter};
+            sub_type = ButtonType.COPY_CODE;
+            parameters = new List<BaseParameters> { copyCodeParameter };
         }
     }
 
@@ -113,8 +113,8 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         public UrlButtonComponent(Uri url, int index = 0)
         {
             this.index = index;
-            this.sub_type = ButtonType.url;
-            this.parameters = new List<BaseParameters>()
+            sub_type = ButtonType.url;
+            parameters = new List<BaseParameters>()
             {
                 new UrlButtonParameter(url)
             };
@@ -139,7 +139,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         public string coupon_code { get; set; }
         public CopyCodeParameter(string code)
         {
-            this.coupon_code = code;
+            coupon_code = code;
         }
     }
     public class UrlButtonParameter : BaseParameters
@@ -149,7 +149,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
         public UrlButtonParameter(Uri url)
         {
-            this.text = url.ToString();
+            text = url.ToString();
         }
     }
 

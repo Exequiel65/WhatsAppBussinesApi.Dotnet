@@ -1,23 +1,23 @@
-﻿namespace WhatsAppBussinesApi.Dotnet.Structure
+﻿namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
     interface ITextMessage
     {
-        BodyText Text { get; set; }
+        BodyText text { get; set; }
     }
     public class TextMessage : BaseMessage, ITextMessage
     {
-        public BodyText Text { get; set; }
+        public BodyText text { get; set; }
 
         public TextMessage() { }
         public TextMessage(string phoneNumber, BodyText text)
         {
-            this.Text = text;
-            this.to = phoneNumber;
+            this.text = text;
+            to = phoneNumber;
         }
         public TextMessage(string phoneNumber, string text, bool previewUrl = false)
         {
-            this.to = phoneNumber;
-            this.Text = new BodyText(text, previewUrl);
+            to = phoneNumber;
+            this.text = new BodyText(text, previewUrl);
         }
     }
 
@@ -33,7 +33,7 @@
         public BodyText(string body, bool previewUrl = false)
         {
             this.body = body.Trim();
-            this.preview_url = previewUrl;
+            preview_url = previewUrl;
         }
     }
 

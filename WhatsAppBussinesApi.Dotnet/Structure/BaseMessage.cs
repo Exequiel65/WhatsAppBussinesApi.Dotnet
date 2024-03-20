@@ -7,7 +7,13 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
     {
         template,
         document,
-        text
+        text,
+        audio,
+        contact,
+        image,
+        location,
+        sticker,
+        video
     }
     interface IMessage
     {
@@ -23,5 +29,15 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         public string to { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public TypeMessage type { get; set; } = TypeMessage.text;
+    }
+
+    public class BaseProvider
+    {
+        public string name { get; set; }
+        public BaseProvider() { }
+        public BaseProvider(string name)
+        {
+            this.name = name;
+        }
     }
 }

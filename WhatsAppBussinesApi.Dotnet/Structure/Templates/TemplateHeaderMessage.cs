@@ -1,4 +1,4 @@
-﻿namespace WhatsAppBussinesApi.Dotnet.Structure
+﻿namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
 {
     public class TemplateHeaderMessage : TemplateTextMessage
     {
@@ -7,7 +7,7 @@
 
         public TemplateHeaderMessage(string sender, string templateName, string lang, Uri HeaderUrlImage, List<BaseParameters> parametersBody) : base(sender, templateName, lang, parametersBody)
         {
-            this.template.components.Add(new Component()
+            template.components.Add(new Component()
             {
                 type = "header",
                 parameters = [new HeaderImageParameter(HeaderUrlImage.ToString())]
@@ -15,7 +15,7 @@
         }
         public TemplateHeaderMessage(string sender, string templateName, string lang, string headerText, List<BaseParameters> parametersBody) : base(sender, templateName, lang, parametersBody)
         {
-            this.template.components.Add(new Component()
+            template.components.Add(new Component()
             {
                 type = "header",
                 parameters = [new HeaderTextParameter(headerText)]
@@ -24,7 +24,7 @@
 
         public TemplateHeaderMessage(string sender, string templateName, string lang, LocationParameter headerLocationParameters, List<BaseParameters> parametersBody) : base(sender, templateName, lang, parametersBody)
         {
-            this.template.components.Add(new Component()
+            template.components.Add(new Component()
             {
                 type = "header",
                 parameters = [new HeaderLocationParameter(headerLocationParameters)]
@@ -41,7 +41,7 @@
 
         public HeaderImageParameter(string imageUrl)
         {
-            this.image = new ImageHeader()
+            image = new ImageHeader()
             {
                 link = imageUrl
             };
@@ -84,7 +84,7 @@
 
         public HeaderLocationParameter(string latitude, string longitude, string name, string address)
         {
-            this.location = new LocationParameter()
+            location = new LocationParameter()
             {
                 latitude = latitude,
                 longitude = longitude,
