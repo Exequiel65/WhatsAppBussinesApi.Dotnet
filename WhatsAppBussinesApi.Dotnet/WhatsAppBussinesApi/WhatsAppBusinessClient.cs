@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using WhatsAppApi.Structure;
+using WhatsAppBussinesApi.Dotnet.Structure;
 
-namespace WhatsAppApi.WhatsAppBussinesApi
+namespace WhatsAppBussinesApi.Dotnet.WhatsAppBussinesApi
 {
     public interface IWhatsAppBusinessClient
     {

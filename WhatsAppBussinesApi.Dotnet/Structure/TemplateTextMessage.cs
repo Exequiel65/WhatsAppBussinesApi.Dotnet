@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace WhatsAppApi.Structure
+namespace WhatsAppBussinesApi.Dotnet.Structure
 {
     public interface ITemplateTextMessage
     {

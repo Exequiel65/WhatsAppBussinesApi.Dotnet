@@ -1,4 +1,4 @@
-﻿namespace WhatsAppApi.Structure
+﻿namespace WhatsAppBussinesApi.Dotnet.Structure
 {
     public class TemplateHeaderMessage : TemplateTextMessage
     {

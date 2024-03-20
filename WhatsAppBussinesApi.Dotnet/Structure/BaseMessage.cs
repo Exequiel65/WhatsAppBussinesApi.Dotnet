@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WhatsAppApi.Structure
+namespace WhatsAppBussinesApi.Dotnet.Structure
 {
     public enum TypeMessage
     {
