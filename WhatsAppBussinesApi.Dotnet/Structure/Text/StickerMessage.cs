@@ -33,7 +33,7 @@
 
         public StickerComponentWithId()
         {
-            
+
         }
 
         public StickerComponentWithId(string id)

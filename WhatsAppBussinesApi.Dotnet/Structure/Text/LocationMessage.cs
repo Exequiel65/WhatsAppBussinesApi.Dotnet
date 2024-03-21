@@ -11,15 +11,15 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         public LocationMessage()
         {
-            
+
         }
-        public LocationMessage(string to,LocationComponent location)
+        public LocationMessage(string to, LocationComponent location)
         {
             this.to = to;
             this.location = location;
         }
 
-        public LocationMessage(string to,decimal longitude, decimal latitude, string name, string address)
+        public LocationMessage(string to, decimal longitude, decimal latitude, string name, string address)
         {
             this.to = to;
             this.location = new LocationComponent()

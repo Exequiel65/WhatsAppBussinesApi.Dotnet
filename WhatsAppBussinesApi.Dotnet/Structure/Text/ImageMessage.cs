@@ -34,7 +34,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         public ImageMessage(string to, string id)
         {
             this.to = to;
-                this.image = new ImageComponentWithId(id);
+            this.image = new ImageComponentWithId(id);
         }
     }
 
