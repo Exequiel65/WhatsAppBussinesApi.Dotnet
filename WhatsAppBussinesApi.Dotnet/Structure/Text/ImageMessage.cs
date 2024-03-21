@@ -39,7 +39,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     }
 
 
-    public class BaseImage { }
+    public class BaseImage : BaseMedia { }
     public class ImageComponentWithProvider : BaseImage
     {
         public string link { get; set; }
