@@ -32,16 +32,14 @@ namespace WhatsAppBussinesApi.Dotnet.Client
 
         private async Task<string?> Post(dynamic body)
         {
-
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, $"https://graph.facebook.com/{_configuration.GetSection("WhatsAppBussines:Version").Value}/{_configuration.GetSection("WhatsAppBussines:NroWhatsApp").Value}/messages");
-            request.Headers.Add("Authorization", $"Bearer {_configuration.GetSection("WhatsAppBussines:BRT").Value}");
-
-            var content = new StringContent(body, null, "application/json");
-            request.Content = content;
-
             try
             {
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Post, $"https://graph.facebook.com/{_configuration.GetSection("WhatsAppBussines:Version").Value}/{_configuration.GetSection("WhatsAppBussines:NroWhatsApp").Value}/messages");
+                request.Headers.Add("Authorization", $"Bearer {_configuration.GetSection("WhatsAppBussines:BRT").Value}");
+
+                var content = new StringContent(body, null, "application/json");
+                request.Content = content;
                 var response = await client.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
@@ -50,8 +48,7 @@ namespace WhatsAppBussinesApi.Dotnet.Client
                 }
                 else
                 {
-
-                    return await response.Content.ReadAsStringAsync(); ;
+                    return await response.Content.ReadAsStringAsync();
                 }
             }
             catch (Exception e)
