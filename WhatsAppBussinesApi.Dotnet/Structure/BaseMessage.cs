@@ -13,7 +13,9 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         image,
         location,
         sticker,
-        video
+        video,
+        interactive,
+        location_request_message
     }
     interface IMessage
     {
