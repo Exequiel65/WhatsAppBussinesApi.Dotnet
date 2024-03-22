@@ -40,11 +40,11 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         public BaseBody body { get; set; }
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
-        public FooterText footer {  get; set; }
+        public FooterText footer { get; set; }
 
         public BaseAction action { get; set; }
 
-        public InteractiveComponent(TextBody body, ActionButtonsReply action, BaseHeader header = null, FooterText footer = null )
+        public InteractiveComponent(TextBody body, ActionButtonsReply action, BaseHeader header = null, FooterText footer = null)
         {
             this.body = body;
             this.action = action;
@@ -69,7 +69,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         public ActionButtonsReply()
         {
-            
+
         }
 
         public ActionButtonsReply(List<ButtonAction> buttons)
@@ -88,7 +88,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         public ButtonAction()
         {
-            
+
         }
 
         public ButtonAction(ReplyButton reply)
@@ -109,7 +109,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         public string title { get; set; }
         public ReplyButton()
         {
-            
+
         }
 
         public ReplyButton(string id, string title)
@@ -120,7 +120,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     }
     #endregion
 
-    
+
 }
 
 

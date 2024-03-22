@@ -15,10 +15,10 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         }
 
-        public InteractiveListMessage(string to, string textBody,string labelButton, List<SectionList> sectionLists, BaseHeader header = null, FooterText footer = null)
+        public InteractiveListMessage(string to, string textBody, string labelButton, List<SectionList> sectionLists, BaseHeader header = null, FooterText footer = null)
         {
             this.to = to;
-            interactive = new ListInteractiveComponent(textBody,labelButton, sectionLists, header, footer);
+            interactive = new ListInteractiveComponent(textBody, labelButton, sectionLists, header, footer);
         }
     }
     public class ListInteractiveComponent
@@ -41,7 +41,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         public ListInteractiveComponent(string textBody, string labelButton, List<SectionList> sectionLists, BaseHeader header = null, FooterText footer = null)
         {
             this.body = new TextBody(textBody);
-            this.action = new ListAction(labelButton,sectionLists);
+            this.action = new ListAction(labelButton, sectionLists);
             this.footer = footer;
             this.header = header;
         }
@@ -49,12 +49,12 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
     public class ListAction : BaseAction
     {
-        public string button { get;}
+        public string button { get; }
         public List<SectionList> sections { get; set; }
 
         public ListAction() { }
 
-        public ListAction(string labelButton,SectionList section)
+        public ListAction(string labelButton, SectionList section)
         {
             this.button = labelButton;
             this.sections = new List<SectionList> { section };

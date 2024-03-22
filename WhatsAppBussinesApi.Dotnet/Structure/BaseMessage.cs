@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using WhatsAppBussinesApi.Dotnet.Structure.Text;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure
 {

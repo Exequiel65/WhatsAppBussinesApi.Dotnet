@@ -12,7 +12,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         public DocumentMessage()
         {
-            
+
         }
 
         public DocumentMessage(string to, Uri link)
