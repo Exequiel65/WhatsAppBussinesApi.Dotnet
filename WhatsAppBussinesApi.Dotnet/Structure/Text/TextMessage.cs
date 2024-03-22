@@ -36,9 +36,4 @@
             preview_url = previewUrl;
         }
     }
-    public class BaseMedia
-    {
-
-    }
-
 }

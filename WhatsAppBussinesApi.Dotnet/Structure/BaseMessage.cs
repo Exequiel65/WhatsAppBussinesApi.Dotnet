@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using WhatsAppBussinesApi.Dotnet.Structure.Text;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure
 {
@@ -41,5 +42,38 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         {
             this.name = name;
         }
+    }
+
+
+    public abstract class BaseParameters
+    {
+        public abstract string type { get; set; }
+    }
+
+    public class BaseMedia
+    {
+
+    }
+
+    public class BaseAction { }
+
+    public enum InteractiveType
+    {
+        list,
+        button,
+        location
+    }
+
+    public enum HeaderInteractiveType
+    {
+        text,
+        image,
+        video,
+        document
+    }
+
+    public enum ButtonsType
+    {
+        reply
     }
 }

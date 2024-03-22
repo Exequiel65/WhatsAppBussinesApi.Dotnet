@@ -71,11 +71,6 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
         public List<BaseParameters> parameters { get; set; }
     }
 
-    public abstract class BaseParameters
-    {
-        public abstract string type { get; set; }
-    }
-
     public class ParameterText : BaseParameters
     {
         public override string type { get; set; } = "text";
