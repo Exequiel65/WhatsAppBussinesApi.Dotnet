@@ -38,6 +38,9 @@ builder.Services.AddWhatsAppBusinessApi();
 
 Make sure to replace PhoneNumber, BearerToken, and Version with the corresponding values from your WhatsApp Business account.
 
+### Example
+[Example Link](https://github.com/Exequiel65/WhatsAppBussinesApi.Dotnet/blob/main/Readme_Example.md)
+
 ### Note:
 This package will be continuously updated to include more methods supported by the WhatsApp Business API. In the following days, additional examples and explanations for constructing and utilizing classes will be provided.
 
