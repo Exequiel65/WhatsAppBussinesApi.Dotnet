@@ -99,3 +99,143 @@ var sections = new List<SectionList>()
 var message = new InteractiveListMessage("+56666544", "Example message interactive list", "View Options", sections);
 var result = await _businessClient.SendMessage(message);
 ```
+## Type Template
+
+### _Only Text_
+```c#
+// this template have three enviroment
+List<BaseParameters> texts = new()
+{
+     new ParameterCurrency("$100.99", "USD", 100990),
+     new ParameterDateTime(DateTime.Now, "es"),
+     new ParameterText("ster")
+};
+// Phone Number, Template Name, language template, data enviroment
+var message = new TemplateTextMessage("+541111111111", "name_template", "es", texts);
+var result = await _businessClient.SendMessage(message);
+return Ok(result);
+```
+
+### _With Header Text_
+```c#
+ var headerText = "Summer";
+
+List<BaseParameters> texts = new()
+{
+     new ParameterCurrency("$100.99", "USD", 100990),
+     new ParameterDateTime(DateTime.Now, "es"),
+     new ParameterText("ster")
+};
+// Phone Number, Template Name, language, data header, data text
+var message = new TemplateHeaderMessage("+54365444555", "test_example", "es", headerText, texts);
+var result = await _businessClient.SendMessage(message);
+
+return Ok(result);
+```
+
+### _With Header Image_
+```c#
+List<BaseParameters> texts = new()
+{
+     new ParameterCurrency("$100.99", "USD", 100990),
+     new ParameterDateTime(DateTime.Now, "es"),
+     new ParameterText("ster")
+};
+
+// template with header type image
+var message = new TemplateHeaderMessage("phone_number", "template_name", "es", new Uri("https://example.com/img.png"), texts);
+
+var result = await _businessClient.SendMessage(message);
+
+return Ok(result);
+```
+### _With Header Location_
+```c#
+LocationParameter headerLocation = new LocationParameter()
+{
+    latitude = "56.56",
+    longitude = "56.56",
+    address = "calle 123",
+    name = "Test Example Location"
+};
+
+List<BaseParameters> texts = new()
+{
+     new ParameterCurrency("$100.99", "USD", 100990),
+     new ParameterDateTime(DateTime.Now, "es"),
+     new ParameterText("ster")
+};
+
+var message = new TemplateHeaderMessage("phone_number", "template_name", "es", headerLocation, texts);
+
+var result = await _businessClient.SendMessage(message);
+
+return Ok(result);
+```
+
+### _Interactive url_
+```c#
+var headerText = "BPNX";
+
+List<BaseParameters> texts = new()
+{
+     new ParameterText("Example"),
+     new ParameterDateTime(DateTime.Now, "es"),
+     new ParameterDateTime(DateTime.Now, "es"),
+     new ParameterText("Test"),
+     new ParameterText("User"),
+     new ParameterText("BPNX"),
+};
+
+List<BaseButtonComponent> buttons = new()
+{
+    new UrlButtonComponent(new Uri("https://google.com"))
+};
+
+
+var message = new TemplateInteractiveMessage("phone_number", "template_name", "es", texts, headerText: headerText, buttonComponents: buttons);
+
+var result = await _businessClient.SendMessage(message);
+
+return Ok(result);
+```
+### _Interactive quick reply_
+```c#
+List<BaseParameters> body = new()
+{
+     new ParameterText("Example"),
+     new ParameterText("BPNX"),
+};
+
+List<BaseButtonComponent> buttons = new()
+{
+    new QuickReplyButton("text_1"),
+    new QuickReplyButton("text_2", 1)
+};
+
+
+var message = new TemplateInteractiveMessage("phone_number", "template_name", "es", body, buttonComponents: buttons);
+
+var result = await _businessClient.SendMessage(message);
+
+return Ok(result);
+```
+### _Interactive copy code_
+```c#
+ List<BaseParameters> body = new()
+{
+     new ParameterText("Example"),
+};
+
+List<BaseButtonComponent> buttons = new()
+{
+    new CopyCodeButton("code_example")
+};
+
+
+var message = new TemplateInteractiveMessage("phone_number", "tempalte_name", "es", body, buttonComponents: buttons);
+
+var result = await _businessClient.SendMessage(message);
+
+return Ok(result);
+```
