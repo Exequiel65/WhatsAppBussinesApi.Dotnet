@@ -1,55 +1,62 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Diagnostics.CodeAnalysis;
 using JsonIgnoreCondition = System.Text.Json.Serialization;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
     public class DocumentMessage : BaseMessage
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TypeMessage type { get; set; } = TypeMessage.document;
-        public BaseDocument document { get; set; }
+        public override TypeMessage type => TypeMessage.document;
+        public required BaseDocument document { get; init; }
 
         public DocumentMessage()
         {
 
         }
 
+        [SetsRequiredMembers]
         public DocumentMessage(string to, Uri link)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.document = new DocumentComponentWithLink()
             {
                 link = link.ToString()
             };
         }
 
+        [SetsRequiredMembers]
         public DocumentMessage(string to, DocumentComponentWithLink link)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.document = link;
         }
 
+        [SetsRequiredMembers]
         public DocumentMessage(string to, string id, string fileName)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.document = new DocumentComponentWithId(id, fileName);
         }
 
+        [SetsRequiredMembers]
         public DocumentMessage(string to, DocumentComponentWithId dId)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.document = dId;
         }
 
+        [SetsRequiredMembers]
         public DocumentMessage(string to, Uri link, string providerName)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.document = new DocumentComponentWithLinkProvider(link.ToString(), providerName);
         }
+
+        [SetsRequiredMembers]
         public DocumentMessage(string to, Uri link, BaseProvider provider)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.document = new DocumentComponentWithLinkProvider(link.ToString(), provider);
         }
     }

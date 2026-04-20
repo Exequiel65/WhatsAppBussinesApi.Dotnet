@@ -1,37 +1,33 @@
 ﻿namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
-    interface ITextMessage
+    public sealed class TextMessage : BaseMessage
     {
-        BodyText text { get; set; }
-    }
-    public class TextMessage : BaseMessage, ITextMessage
-    {
-        public BodyText text { get; set; }
+        public override TypeMessage type => TypeMessage.text;
+        public BodyText text { get; init; }
 
         public TextMessage() { }
         public TextMessage(string phoneNumber, BodyText text)
         {
-            this.text = text;
-            to = phoneNumber;
+            to = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+            this.text = text ?? throw new ArgumentNullException(nameof(text));
         }
         public TextMessage(string phoneNumber, string text, bool previewUrl = false)
         {
-            to = phoneNumber;
+            to = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
             this.text = new BodyText(text, previewUrl);
         }
     }
 
     public class BodyText
     {
-        public bool preview_url { get; set; } = false;
-        public string body { get; set; }
+        public bool preview_url { get; }
+        public string body { get; }
 
-        public BodyText()
-        {
-
-        }
         public BodyText(string body, bool previewUrl = false)
         {
+            if (string.IsNullOrWhiteSpace(body))
+                throw new ArgumentException("Body cannot be empty", nameof(body));
+
             this.body = body.Trim();
             preview_url = previewUrl;
         }

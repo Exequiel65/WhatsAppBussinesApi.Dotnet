@@ -1,27 +1,29 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
     public class LocationMessage : BaseMessage
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TypeMessage type { get; set; } = TypeMessage.location;
-        public LocationComponent location { get; set; }
+        public override TypeMessage type => TypeMessage.location;
+        public required LocationComponent location { get; init; }
 
         public LocationMessage()
         {
 
         }
+        [SetsRequiredMembers]
         public LocationMessage(string to, LocationComponent location)
         {
-            this.to = to;
-            this.location = location;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
+            this.location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
+        [SetsRequiredMembers]
         public LocationMessage(string to, decimal longitude, decimal latitude, string name, string address)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.location = new LocationComponent()
             {
                 address = address,

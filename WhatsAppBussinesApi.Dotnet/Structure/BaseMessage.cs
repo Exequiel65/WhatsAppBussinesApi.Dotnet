@@ -3,6 +3,7 @@ using Newtonsoft.Json.Converters;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum TypeMessage
     {
         template,
@@ -17,20 +18,13 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         interactive,
         location_request_message
     }
-    interface IMessage
+
+    public abstract class BaseMessage
     {
-        string messaging_product { get; set; }
-        string recipient_type { get; set; }
-        string to { get; set; }
-        TypeMessage type { get; set; }
-    }
-    public class BaseMessage : IMessage
-    {
-        public string messaging_product { get; set; } = "whatsapp";
-        public string recipient_type { get; set; } = "individual";
-        public string to { get; set; }
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TypeMessage type { get; set; } = TypeMessage.text;
+        public string messaging_product { get; init; } = "whatsapp";
+        public string recipient_type { get; init; } = "individual";
+        public required string to { get; init; }
+        public abstract TypeMessage type { get; }
     }
 
     public class BaseProvider
@@ -56,6 +50,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
 
     public class BaseAction { }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum InteractiveType
     {
         list,
@@ -63,6 +58,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         location
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum HeaderInteractiveType
     {
         text,
@@ -71,6 +67,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         document
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ButtonsType
     {
         reply

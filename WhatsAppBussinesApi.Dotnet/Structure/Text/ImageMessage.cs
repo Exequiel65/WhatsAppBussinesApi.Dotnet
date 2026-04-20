@@ -1,39 +1,42 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
     public class ImageMessage : BaseMessage
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TypeMessage type { get; set; } = TypeMessage.image;
+        public override TypeMessage type => TypeMessage.image;
 
-        public BaseImage image { get; set; }
+        public required BaseImage image { get; init; }
 
         public ImageMessage()
         {
 
         }
+        [SetsRequiredMembers]
         public ImageMessage(string to, Uri link)
         {
             this.image = new ImageComponent(link.ToString());
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
         }
+
+        [SetsRequiredMembers]
         public ImageMessage(string to, Uri link, string providerName)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.image = new ImageComponentWithProvider(link.ToString(), providerName);
         }
 
+        [SetsRequiredMembers]
         public ImageMessage(string to, ImageComponent component)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.image = component;
         }
 
+        [SetsRequiredMembers]
         public ImageMessage(string to, string id)
         {
-            this.to = to;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.image = new ImageComponentWithId(id);
         }
     }
