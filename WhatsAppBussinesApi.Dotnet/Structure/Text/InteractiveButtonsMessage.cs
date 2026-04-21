@@ -1,28 +1,32 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Diagnostics.CodeAnalysis;
 using JsonIgnoreCondition = System.Text.Json.Serialization;
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
     public class InteractiveButtonsMessage : BaseMessage
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TypeMessage type { get; set; } = TypeMessage.interactive;
 
-        public InteractiveComponent interactive { get; set; }
+        public override TypeMessage type => TypeMessage.interactive;
+
+        public required InteractiveComponent interactive { get; init; }
         public InteractiveButtonsMessage() { }
 
+        [SetsRequiredMembers]
         public InteractiveButtonsMessage(string to, InteractiveComponent component)
         {
             this.interactive = component;
             this.to = to;
         }
 
+        [SetsRequiredMembers]
         public InteractiveButtonsMessage(string to, TextBody body, ActionButtonsReply action, BaseHeader header = null, FooterText footer = null)
         {
             this.interactive = new InteractiveComponent(body, action, header, footer);
             this.to = to;
         }
 
+        [SetsRequiredMembers]
         public InteractiveButtonsMessage(string to, string textBody, ActionButtonsReply action, BaseHeader header = null, FooterText footer = null)
         {
             this.interactive = new InteractiveComponent(new TextBody(textBody), action, header, footer);
@@ -33,8 +37,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
     public class InteractiveComponent
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public InteractiveType type { get; } = InteractiveType.list;
+        public InteractiveType type { get; } = InteractiveType.button;
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
         public BaseHeader header { get; set; }
 
@@ -48,7 +51,6 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         {
             this.body = body;
             this.action = action;
-            this.type = InteractiveType.button;
             if (header != null)
             {
                 this.header = header;
@@ -81,7 +83,6 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
     public class ButtonAction
     {
-        [JsonConverter(typeof(StringEnumConverter))]
         public ButtonsType type { get; set; } = ButtonsType.reply;
 
         public ReplyButton reply { get; set; }

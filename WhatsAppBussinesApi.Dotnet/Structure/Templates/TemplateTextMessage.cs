@@ -1,50 +1,49 @@
-﻿using System.Globalization;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
 {
     public interface ITemplateTextMessage
     {
-        TemplateData template { get; set; }
+        TemplateData template { get; }
     }
     public class TemplateTextMessage : BaseMessage, ITemplateTextMessage
     {
-        public TemplateData template { get; set; }
+        public override TypeMessage type => TypeMessage.template;
+
+        public required TemplateData template { get; init; }
 
         public TemplateTextMessage()
         {
-            type = TypeMessage.template;
         }
 
-        public TemplateTextMessage(string sender, TemplateData template)
+        [SetsRequiredMembers]
+        public TemplateTextMessage(string to, TemplateData template)
         {
-            type = TypeMessage.template;
-            this.template = template;
-            to = sender;
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
+            this.template = template ?? throw new ArgumentNullException(nameof(template));
         }
 
-        public TemplateTextMessage(string sender, string templateName, string lang, List<BaseParameters> parametersBody)
+        [SetsRequiredMembers]
+        public TemplateTextMessage(string to, string templateName, string lang, List<BaseParameters> parametersBody)
         {
-            type = TypeMessage.template;
-            if (template is null)
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
+
+            template = new TemplateData
             {
-                template = new TemplateData()
+                name = templateName,
+                language = new LanguageCode(lang),
+                components = new List<Component>
                 {
-                    name = templateName,
-                    language = new LanguageCode(lang)
-                };
-            }
-            else
-            {
-                template.name = templateName;
-                template.language = new LanguageCode(lang);
-            }
-
-            template.components.Add(new Component()
-            {
-                type = "body",
-                parameters = parametersBody,
-            });
-            to = sender;
+                    new()
+                    {
+                        type = "body",
+                        parameters = parametersBody ?? []
+                    }
+                }
+            };
         }
     }
 
@@ -164,5 +163,166 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
             year = date.Year;
             day_of_month = date.Day;
         }
+    }
+
+    public class BaseButtonComponent : Component
+    {
+        public new string type { get; set; } = "button";
+
+        public ButtonType sub_type { get; set; } = ButtonType.quick_reply;
+        public int index { get; set; } = 0;
+    }
+
+    public class QuickReplyButton : BaseButtonComponent
+    {
+        public QuickReplyButton(string payload, int index = 0)
+        {
+            this.index = index;
+            parameters = new List<BaseParameters> { new QuickReplyParameter(payload) };
+        }
+        public QuickReplyButton(QuickReplyParameter quickReply, int index = 0)
+        {
+            this.index = index;
+            parameters = new List<BaseParameters> { quickReply };
+        }
+    }
+
+    public class CopyCodeButton : BaseButtonComponent
+    {
+        public CopyCodeButton(string code, int index = 0)
+        {
+            this.index = index;
+            sub_type = ButtonType.copy_code;
+            parameters = new List<BaseParameters> { new CopyCodeParameter(code) };
+        }
+        public CopyCodeButton(CopyCodeParameter copyCodeParameter, int index = 0)
+        {
+            this.index = index;
+            sub_type = ButtonType.copy_code;
+            parameters = new List<BaseParameters> { copyCodeParameter };
+        }
+    }
+
+    public class UrlButtonComponent : BaseButtonComponent
+    {
+        public UrlButtonComponent(Uri url, int index = 0)
+        {
+            this.index = index;
+            sub_type = ButtonType.url;
+            parameters = new List<BaseParameters>()
+            {
+                new UrlButtonParameter(url)
+            };
+        }
+    }
+
+
+    public class QuickReplyParameter : BaseParameters
+    {
+        public override string type { get; set; } = "payload";
+        public string payload { get; set; }
+
+        public QuickReplyParameter(string payload)
+        {
+            this.payload = payload;
+        }
+    }
+
+    public class CopyCodeParameter : BaseParameters
+    {
+        public override string type { get; set; } = "coupon_code";
+        public string coupon_code { get; set; }
+        public CopyCodeParameter(string code)
+        {
+            coupon_code = code;
+        }
+    }
+    public class UrlButtonParameter : BaseParameters
+    {
+        public override string type { get; set; } = "text";
+        public string text { get; set; }
+
+        public UrlButtonParameter(Uri url)
+        {
+            text = url.ToString();
+        }
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum ButtonType
+    {
+        quick_reply,
+        url,
+        copy_code
+    }
+
+    public class HeaderImageParameter : BaseParameters
+    {
+        public override string type { get; set; } = "image";
+        public ImageHeader image { get; set; }
+
+        public HeaderImageParameter() { }
+
+        public HeaderImageParameter(string imageUrl)
+        {
+            image = new ImageHeader()
+            {
+                link = imageUrl
+            };
+        }
+    }
+
+    public class HeaderTextParameter : BaseParameters
+    {
+        public override string type { get; set; } = "text";
+        public string text { get; set; }
+
+        public HeaderTextParameter()
+        {
+
+        }
+
+        public HeaderTextParameter(string text)
+        {
+            this.text = text;
+        }
+    }
+
+    public class ImageHeader
+    {
+        public string link { get; set; }
+    }
+
+
+    public class HeaderLocationParameter : BaseParameters
+    {
+        public override string type { get; set; } = "location";
+        public LocationParameter location { get; set; }
+
+        public HeaderLocationParameter() { }
+
+        public HeaderLocationParameter(LocationParameter location)
+        {
+            this.location = location;
+        }
+
+        public HeaderLocationParameter(string latitude, string longitude, string name, string address)
+        {
+            location = new LocationParameter()
+            {
+                latitude = latitude,
+                longitude = longitude,
+                name = name,
+                address = address
+            };
+        }
+    }
+
+    public class LocationParameter
+    {
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string name { get; set; }
+        public string address { get; set; }
     }
 }

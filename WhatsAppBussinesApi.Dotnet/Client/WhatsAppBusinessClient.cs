@@ -34,9 +34,18 @@ namespace WhatsAppBussinesApi.Dotnet.Client
         {
             try
             {
+                var version = GetSetting("WhatsAppBusiness:Version", "WhatsAppBussines:Version");
+                var phoneNumber = GetSetting("WhatsAppBusiness:PhoneNumber", "WhatsAppBussines:NroWhatsApp");
+                var bearerToken = GetSetting("WhatsAppBusiness:BearerToken", "WhatsAppBussines:BRT");
+
+                if (string.IsNullOrWhiteSpace(version) || string.IsNullOrWhiteSpace(phoneNumber) || string.IsNullOrWhiteSpace(bearerToken))
+                {
+                    return "Faltan valores de configuración de WhatsAppBusiness en appsettings.";
+                }
+
                 var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Post, $"https://graph.facebook.com/{_configuration.GetSection("WhatsAppBussines:Version").Value}/{_configuration.GetSection("WhatsAppBussines:NroWhatsApp").Value}/messages");
-                request.Headers.Add("Authorization", $"Bearer {_configuration.GetSection("WhatsAppBussines:BRT").Value}");
+                var request = new HttpRequestMessage(HttpMethod.Post, $"https://graph.facebook.com/{version}/{phoneNumber}/messages");
+                request.Headers.Add("Authorization", $"Bearer {bearerToken}");
 
                 var content = new StringContent(body, null, "application/json");
                 request.Content = content;
@@ -55,6 +64,11 @@ namespace WhatsAppBussinesApi.Dotnet.Client
             {
                 return e.Message;
             }
+        }
+
+        private string? GetSetting(string primaryKey, string fallbackKey)
+        {
+            return _configuration[primaryKey] ?? _configuration[fallbackKey];
         }
     }
 }

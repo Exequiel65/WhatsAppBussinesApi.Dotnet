@@ -13,16 +13,16 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/Exequiel65/WhatsAppBussinesApi.Dotnet</RepositoryUrl>
     <PackageTags>WhatsAppApi</PackageTags>
-    <PackageIcon>wsp-icon.png</PackageIcon>
-	<VersionPrefix>1.0.2</VersionPrefix>
+    <!--<PackageIcon>wsp-icon.png</PackageIcon>-->
+	<VersionPrefix>2.0.0</VersionPrefix>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Include="..\..\..\..\..\OneDrive\Imágenes\wsp-icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
