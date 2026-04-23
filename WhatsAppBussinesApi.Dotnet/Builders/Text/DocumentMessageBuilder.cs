@@ -6,6 +6,8 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
     {
         private string? _recipient;
         private BaseDocument? _document;
+        private string? _caption;
+        private string? _fileName;
 
         public DocumentMessageBuilder To(string phoneNumber)
         {
@@ -19,28 +21,42 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             return this;
         }
 
-        public DocumentMessageBuilder WithDocumentLink(string link, string? fileName = null)
+        public DocumentMessageBuilder WithCaption(string caption)
+        {
+            _caption = caption;
+            return this;
+        }
+
+        public DocumentMessageBuilder WithFileName(string fileName)
+        {
+            _fileName = fileName;
+            return this;
+        }
+
+        public DocumentMessageBuilder WithDocumentLink(string link, string? fileName = null, string? caption = null)
         {
             _document = new DocumentComponentWithLink
             {
                 link = link,
-                filename = fileName
+                filename = fileName,
+                caption = caption
             };
             return this;
         }
 
-        public DocumentMessageBuilder WithDocumentLink(string link, string providerName, string? fileName = null)
+        public DocumentMessageBuilder WithDocumentLink(string link, string providerName, string? fileName = null, string? caption = null)
         {
             _document = new DocumentComponentWithLinkProvider(link, providerName)
             {
-                filename = fileName
+                filename = fileName,
+                caption = caption
             };
             return this;
         }
 
-        public DocumentMessageBuilder WithDocumentId(string id, string fileName)
+        public DocumentMessageBuilder WithDocumentId(string id, string? fileName = null, string? caption = null)
         {
-            _document = new DocumentComponentWithId(id, fileName);
+            _document = new DocumentComponentWithId(id, fileName, caption);
             return this;
         }
 
@@ -55,6 +71,24 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             {
                 throw new InvalidOperationException("Document payload is required.");
             }
+
+            if (_caption is not null && _caption.Length > 1024)
+            {
+                throw new InvalidOperationException("Caption cannot exceed 1024 characters.");
+            }
+
+            if (_document is DocumentComponentWithId idDocument && string.IsNullOrWhiteSpace(idDocument.id))
+            {
+                throw new InvalidOperationException("Document id is required when using id payload.");
+            }
+
+            if (_document is DocumentComponentWithLink linkDocument && string.IsNullOrWhiteSpace(linkDocument.link))
+            {
+                throw new InvalidOperationException("Document link is required when using link payload.");
+            }
+
+            _document.filename ??= _fileName;
+            _document.caption ??= _caption;
 
             return new DocumentMessage
             {
