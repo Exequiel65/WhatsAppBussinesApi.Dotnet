@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
@@ -13,17 +14,23 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         }
         [SetsRequiredMembers]
-        public ImageMessage(string to, Uri link)
+        public ImageMessage(string to, Uri link, string? caption = null)
         {
-            this.image = new ImageComponent(link.ToString());
+            this.image = new ImageComponent(link.ToString())
+            {
+                caption = caption
+            };
             this.to = to ?? throw new ArgumentNullException(nameof(to));
         }
 
         [SetsRequiredMembers]
-        public ImageMessage(string to, Uri link, string providerName)
+        public ImageMessage(string to, Uri link, string providerName, string? caption = null)
         {
             this.to = to ?? throw new ArgumentNullException(nameof(to));
-            this.image = new ImageComponentWithProvider(link.ToString(), providerName);
+            this.image = new ImageComponentWithProvider(link.ToString(), providerName)
+            {
+                caption = caption
+            };
         }
 
         [SetsRequiredMembers]
@@ -34,15 +41,22 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         }
 
         [SetsRequiredMembers]
-        public ImageMessage(string to, string id)
+        public ImageMessage(string to, string id, string? caption = null)
         {
             this.to = to ?? throw new ArgumentNullException(nameof(to));
-            this.image = new ImageComponentWithId(id);
+            this.image = new ImageComponentWithId(id)
+            {
+                caption = caption
+            };
         }
     }
 
 
-    public class BaseImage : BaseMedia { }
+    public class BaseImage : BaseMedia
+    {
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? caption { get; set; }
+    }
     public class ImageComponentWithProvider : BaseImage
     {
         public string link { get; set; }
