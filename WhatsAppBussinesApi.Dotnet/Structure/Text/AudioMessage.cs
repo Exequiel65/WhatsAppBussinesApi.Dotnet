@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
@@ -12,10 +13,23 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         }
 
         [SetsRequiredMembers]
-        public AudioMessage(string to, string id)
+        public AudioMessage(string to, string id, bool? voice = null)
         {
             this.to = to ?? throw new ArgumentNullException(nameof(to));
-            audio = new AudioComponent(id);
+            audio = new AudioComponent(id)
+            {
+                voice = voice
+            };
+        }
+
+        [SetsRequiredMembers]
+        public AudioMessage(string to, Uri link, bool? voice = null)
+        {
+            this.to = to ?? throw new ArgumentNullException(nameof(to));
+            audio = new AudioComponent(link)
+            {
+                voice = voice
+            };
         }
 
         [SetsRequiredMembers]
@@ -28,7 +42,18 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
     public class AudioComponent
     {
-        public string id { get; init; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? id { get; init; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? link { get; init; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? voice { get; init; }
+
+        public AudioComponent()
+        {
+        }
 
         public AudioComponent(string id)
         {
@@ -38,6 +63,11 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
             }
 
             this.id = id;
+        }
+
+        public AudioComponent(Uri link)
+        {
+            this.link = link?.ToString() ?? throw new ArgumentNullException(nameof(link));
         }
     }
 }
