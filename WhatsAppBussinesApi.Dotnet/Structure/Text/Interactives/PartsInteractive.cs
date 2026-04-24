@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using WhatsAppBussinesApi.Dotnet.Structure.Text;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
 {
@@ -7,62 +8,98 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
     public class BaseHeader
     {
         [JsonConverter(typeof(StringEnumConverter))]
-        public HeaderInteractiveType type { get; } = HeaderInteractiveType.text;
+        public HeaderInteractiveType type { get; protected set; }
     }
-
 
     public class HeaderInteractive : BaseHeader
     {
         public string text { get; set; }
+
+        public HeaderInteractive()
+        {
+            type = HeaderInteractiveType.text;
+        }
+
+        public HeaderInteractive(string text)
+        {
+            type = HeaderInteractiveType.text;
+            this.text = text;
+        }
     }
 
     public class HeaderDocumentInteractive : BaseHeader
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public HeaderInteractiveType type { get; } = HeaderInteractiveType.document;
         public BaseDocument document { get; set; }
 
         public HeaderDocumentInteractive()
         {
-
+            type = HeaderInteractiveType.document;
         }
 
-        public HeaderDocumentInteractive(string id, string fileName)
+        public HeaderDocumentInteractive(string id, string? fileName = null)
         {
-            this.document = new DocumentComponentWithId(id, fileName);
+            type = HeaderInteractiveType.document;
+            document = new DocumentComponentWithId(id, fileName);
         }
-        public HeaderDocumentInteractive(DocumentComponentWithId document)
+
+        public HeaderDocumentInteractive(DocumentComponentWithLink document)
         {
+            type = HeaderInteractiveType.document;
             this.document = document;
         }
 
-        public HeaderDocumentInteractive(Uri link, string providerName)
+        public HeaderDocumentInteractive(Uri link, string? fileName = null)
         {
-            this.document = new DocumentComponentWithLinkProvider(link.ToString(), providerName);
+            type = HeaderInteractiveType.document;
+            document = new DocumentComponentWithLink
+            {
+                link = link.ToString(),
+                filename = fileName
+            };
         }
     }
 
-
     public class HeaderImageInteractive : BaseHeader
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public HeaderInteractiveType type { get; } = HeaderInteractiveType.image;
         public BaseImage image { get; set; }
-
 
         public HeaderImageInteractive()
         {
-
+            type = HeaderInteractiveType.image;
         }
 
         public HeaderImageInteractive(string id)
         {
-            this.image = new ImageComponentWithId(id);
+            type = HeaderInteractiveType.image;
+            image = new ImageComponentWithId(id);
         }
 
-        public HeaderImageInteractive(Uri link, string providerName)
+        public HeaderImageInteractive(Uri link)
         {
-            this.image = new ImageComponentWithProvider(link.ToString(), providerName);
+            type = HeaderInteractiveType.image;
+            image = new ImageComponentWithProvider(link.ToString(), new BaseProvider("default"));
+        }
+    }
+
+    public class HeaderVideoInteractive : BaseHeader
+    {
+        public BaseVideo video { get; set; }
+
+        public HeaderVideoInteractive()
+        {
+            type = HeaderInteractiveType.video;
+        }
+
+        public HeaderVideoInteractive(string id)
+        {
+            type = HeaderInteractiveType.video;
+            video = new VideoComponentWithId(id);
+        }
+
+        public HeaderVideoInteractive(Uri link)
+        {
+            type = HeaderInteractiveType.video;
+            video = new VideoComponentWithLink(link.ToString());
         }
     }
 

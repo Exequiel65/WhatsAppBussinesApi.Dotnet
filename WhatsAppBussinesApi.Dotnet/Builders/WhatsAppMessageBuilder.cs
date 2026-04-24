@@ -32,5 +32,7 @@ namespace WhatsAppBussinesApi.Dotnet.Builders
         public InteractiveListMessageBuilder InteractiveList() => new();
 
         public RequestLocationMessageBuilder InteractiveLocation() => new();
+
+        public InteractiveCtaUrlMessageBuilder InteractiveCtaUrl() => new();
     }
 }
