@@ -56,7 +56,8 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
     {
         list,
         button,
-        location
+        location,
+        carousel
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

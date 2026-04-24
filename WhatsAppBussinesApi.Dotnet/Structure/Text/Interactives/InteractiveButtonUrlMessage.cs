@@ -49,7 +49,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
         }
     }
 
-    public class CtaUrlAction
+    public class CtaUrlAction : BaseAction
     {
         public string name { get; } = "cta_url";
         public required CtaUrlParameters parameters { get; init; }

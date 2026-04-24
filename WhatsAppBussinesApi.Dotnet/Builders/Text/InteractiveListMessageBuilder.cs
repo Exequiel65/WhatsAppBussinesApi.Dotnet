@@ -41,17 +41,9 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             return this;
         }
 
-        public InteractiveListMessageBuilder WithHeader(BaseHeader header)
+        public InteractiveListMessageBuilder WithHeader(string text)
         {
-            _header = header;
-            return this;
-        }
-
-        public InteractiveListMessageBuilder WithHeader(Action<InteractiveHeaderBuilder> configure)
-        {
-            var builder = new InteractiveHeaderBuilder();
-            configure(builder);
-            _header = builder.Build();
+            _header = new HeaderInteractive(text);
             return this;
         }
 
