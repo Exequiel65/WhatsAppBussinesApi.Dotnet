@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Diagnostics.CodeAnalysis;
-
-namespace WhatsAppBussinesApi.Dotnet.Structure.Text
+using JsonIgnoreCondition = System.Text.Json.Serialization;
+namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
 {
     public class InteractiveListMessage : BaseMessage
     {
@@ -26,11 +26,14 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public InteractiveType type { get; set; } = InteractiveType.list;
-        public BaseHeader header { get; set; }
+
+        [JsonIgnoreCondition.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
+        public BaseHeader? header { get; set; }
 
         public TextBody body { get; set; }
 
-        public FooterText footer { get; set; }
+        [JsonIgnoreCondition.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
+        public FooterText? footer { get; set; }
 
         public BaseAction action { get; set; }
 
@@ -71,7 +74,6 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     {
         public string title { get; set; }
         public List<Row> rows { get; set; }
-
         public SectionList() { }
 
         public SectionList(string title, List<Row> rows)
@@ -86,11 +88,12 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     {
         public string id { get; set; }
         public string title { get; set; }
-        public string description { get; set; }
+        [JsonIgnoreCondition.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
+        public string? description { get; set; }
 
         public Row() { }
 
-        public Row(string id, string title, string description)
+        public Row(string id, string title, string description = null)
         {
             this.id = id;
             this.title = title;

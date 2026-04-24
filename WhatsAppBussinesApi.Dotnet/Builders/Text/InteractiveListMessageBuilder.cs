@@ -1,4 +1,4 @@
-using WhatsAppBussinesApi.Dotnet.Structure.Text;
+using WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives;
 
 namespace WhatsAppBussinesApi.Dotnet.Builders.Text
 {
@@ -41,9 +41,9 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             return this;
         }
 
-        public InteractiveListMessageBuilder WithHeader(BaseHeader header)
+        public InteractiveListMessageBuilder WithHeader(string text)
         {
-            _header = header;
+            _header = new HeaderInteractive(text);
             return this;
         }
 
@@ -71,14 +71,34 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
                 throw new InvalidOperationException("Body text is required.");
             }
 
+            if (_bodyText.Length > 1024)
+            {
+                throw new InvalidOperationException("Body text cannot exceed 1024 characters.");
+            }
+
             if (string.IsNullOrWhiteSpace(_buttonLabel))
             {
                 throw new InvalidOperationException("Button label is required.");
             }
 
+            if (_buttonLabel.Length > 20)
+            {
+                throw new InvalidOperationException("Button label cannot exceed 20 characters.");
+            }
+
             if (_sections.Count == 0)
             {
                 throw new InvalidOperationException("At least one section is required.");
+            }
+
+            if (_footer is not null && _footer.text?.Length > 60)
+            {
+                throw new InvalidOperationException("Footer text cannot exceed 60 characters.");
+            }
+
+            if (_header is HeaderInteractive headerText && headerText.text?.Length > 60)
+            {
+                throw new InvalidOperationException("Header text cannot exceed 60 characters.");
             }
 
             return new InteractiveListMessage

@@ -1,20 +1,23 @@
 # WhatsAppBussinesApi.Dotnet
 
-`WhatsAppBussinesApi.Dotnet` is a .NET 8+ library to send WhatsApp Business messages and parse incoming webhook payloads.
+Libreria .NET 8+ para trabajar con WhatsApp Business API con enfoque builder y modelos tipados para webhooks.
 
-The library now includes:
+Version objetivo actual: 2.1.0-beta.
 
-- A builder-based API to construct messages in a fluent and validated way.
-- Strongly typed webhook models.
-- Webhook interpretation helpers that convert webhook objects into easy-to-consume domain results.
+## Navegacion
 
-## Installation
+- Guia de ejemplos: [Readme_Example.md](Readme_Example.md)
+- Documentacion de soporte actual: [docs/README.md](docs/README.md)
+- Mensajes soportados: [docs/supported-messages.md](docs/supported-messages.md)
+- Webhooks soportados: [docs/webhooks.md](docs/webhooks.md)
+
+## Instalacion
 
 ```bash
 dotnet add package WhatsAppBussinesApi.Dotnet
 ```
 
-## Service Registration
+## Registro de servicios
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet;
@@ -22,9 +25,9 @@ using WhatsAppBussinesApi.Dotnet;
 builder.Services.AddWhatsAppBussinesApi();
 ```
 
-## Configuration
+## Configuracion
 
-Add your credentials in `appsettings.json`:
+Configura credenciales en appsettings.json:
 
 ```json
 {
@@ -36,9 +39,15 @@ Add your credentials in `appsettings.json`:
 }
 ```
 
-## Sending Messages (Builder API)
+Tambien se conservan claves legacy por compatibilidad:
 
-### Text message
+- WhatsAppBussines:NroWhatsApp
+- WhatsAppBussines:BRT
+- WhatsAppBussines:Version
+
+## Envio de mensajes
+
+### Texto simple
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -47,28 +56,30 @@ var message = WhatsAppMessageBuilder
     .Text
     .Text()
     .To("+1111111111")
-    .WithBody("Hello from .NET", previewUrl: false)
+    .WithBody("Hola desde .NET", previewUrl: false)
     .Build();
 
 var result = await businessClient.SendMessage(message);
 ```
 
-### Image message
+### Subida de media + envio de imagen por id
 
 ```csharp
-using WhatsAppBussinesApi.Dotnet.Builders;
+using var stream = File.OpenRead("./assets/promo.png");
+
+var mediaId = await businessClient.UploadMedia(stream, "promo.png", "image/png");
 
 var imageMessage = WhatsAppMessageBuilder
     .Text
     .Image()
     .To("+1111111111")
-    .WithImageLink("https://example.com/image.png")
+    .WithImageId(mediaId!)
     .Build();
 
 var result = await businessClient.SendMessage(imageMessage);
 ```
 
-### Template message
+### Template
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -85,33 +96,19 @@ var templateMessage = WhatsAppMessageBuilder
 var result = await businessClient.SendMessage(templateMessage);
 ```
 
-## Webhook JSON Conversion and Interpretation
+## Media API disponible
 
-The webhook flow is:
+- UploadMedia(Stream, fileName, mimeType)
+- GetMediaUrl(mediaId, phoneNumberId?)
+- DownloadMedia(mediaUrl)
+- DeleteMedia(mediaId, phoneNumberId?)
 
-1. Receive raw JSON from your webhook endpoint.
-2. Deserialize into `WhatsAppWebhook`.
-3. Interpret with `WhatsAppWebhookParser`.
+## Webhooks
 
-```csharp
-using System.Text.Json;
-using WhatsAppBussinesApi.Dotnet.Structure.Webhook;
+Parser soportado actualmente:
 
-var webhook = JsonSerializer.Deserialize<WhatsAppWebhook>(jsonPayload);
+- IncomingTextMessage
+- OutgoingStatusMessage
+- IncomingLocationMessage
 
-if (webhook is null)
-{
-    return;
-}
-
-var incomingTextMessages = WhatsAppWebhookParser.ExtractIncomingTextMessages(webhook);
-var outgoingStatuses = WhatsAppWebhookParser.ExtractStatusMessages(webhook);
-```
-
-`ExtractIncomingTextMessages` returns normalized incoming text messages.
-
-`ExtractStatusMessages` returns delivery/status updates for outgoing messages.
-
-## More Examples
-
-See the full examples in `Readme_Example.md`.
+Consulta [docs/webhooks.md](docs/webhooks.md) para ejemplos de uso.

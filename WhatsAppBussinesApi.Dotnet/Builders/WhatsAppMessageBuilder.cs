@@ -15,6 +15,8 @@ namespace WhatsAppBussinesApi.Dotnet.Builders
 
         public AudioMessageBuilder Audio() => new();
 
+        public VideoMessageBuilder Video() => new();
+
         public ImageMessageBuilder Image() => new();
 
         public DocumentMessageBuilder Document() => new();
@@ -23,8 +25,14 @@ namespace WhatsAppBussinesApi.Dotnet.Builders
 
         public StickerMessageBuilder Sticker() => new();
 
+        public ReactionMessageBuilder Reaction() => new();
+
         public InteractiveButtonsMessageBuilder InteractiveButtons() => new();
 
         public InteractiveListMessageBuilder InteractiveList() => new();
+
+        public RequestLocationMessageBuilder InteractiveLocation() => new();
+
+        public InteractiveCtaUrlMessageBuilder InteractiveCtaUrl() => new();
     }
 }

@@ -102,6 +102,24 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Webhook
 
         [JsonPropertyName("referral")]
         public WhatsAppWebhookReferral? Referral { get; init; }
+
+        [JsonPropertyName("location")]
+        public WhatsAppWebhookLocation? Location { get; init; }
+    }
+
+    public sealed class WhatsAppWebhookLocation
+    {
+        [JsonPropertyName("address")]
+        public string? Address { get; init; }
+
+        [JsonPropertyName("latitude")]
+        public decimal? Latitude { get; init; }
+
+        [JsonPropertyName("longitude")]
+        public decimal? Longitude { get; init; }
+
+        [JsonPropertyName("name")]
+        public string? Name { get; init; }
     }
 
     public sealed class WhatsAppWebhookMessageContext

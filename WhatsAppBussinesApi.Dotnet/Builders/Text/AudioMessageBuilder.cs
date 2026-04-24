@@ -6,6 +6,7 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
     {
         private string? _recipient;
         private AudioComponent? _audio;
+        private bool? _voice;
 
         public AudioMessageBuilder To(string phoneNumber)
         {
@@ -16,6 +17,18 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
         public AudioMessageBuilder WithAudioId(string id)
         {
             _audio = new AudioComponent(id);
+            return this;
+        }
+
+        public AudioMessageBuilder WithAudioLink(string link)
+        {
+            _audio = new AudioComponent(new Uri(link));
+            return this;
+        }
+
+        public AudioMessageBuilder AsVoice(bool voice = true)
+        {
+            _voice = voice;
             return this;
         }
 
@@ -40,7 +53,12 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             return new AudioMessage
             {
                 to = _recipient,
-                audio = _audio
+                audio = new AudioComponent
+                {
+                    id = _audio.id,
+                    link = _audio.link,
+                    voice = _voice
+                }
             };
         }
     }

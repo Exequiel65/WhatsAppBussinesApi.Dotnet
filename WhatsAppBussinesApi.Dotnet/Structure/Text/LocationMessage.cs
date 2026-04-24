@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
@@ -21,7 +20,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         }
 
         [SetsRequiredMembers]
-        public LocationMessage(string to, decimal longitude, decimal latitude, string name, string address)
+        public LocationMessage(string to, decimal longitude, decimal latitude, string? name = null, string? address = null)
         {
             this.to = to ?? throw new ArgumentNullException(nameof(to));
             this.location = new LocationComponent()
@@ -38,7 +37,9 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     {
         public decimal longitude { get; set; }
         public decimal latitude { get; set; }
-        public string name { get; set; }
-        public string address { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? name { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? address { get; set; }
     }
 }

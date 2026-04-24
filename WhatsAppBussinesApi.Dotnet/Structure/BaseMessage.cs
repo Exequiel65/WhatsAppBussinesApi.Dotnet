@@ -15,6 +15,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         location,
         sticker,
         video,
+        reaction,
         interactive,
         location_request_message
     }
@@ -55,7 +56,8 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
     {
         list,
         button,
-        location
+        location,
+        carousel
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

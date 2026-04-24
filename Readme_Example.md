@@ -1,5 +1,12 @@
 # Examples
 
+Guia rapida para beta 2.1.0.
+
+Tambien puedes ver:
+
+- Soporte actual de mensajes: [docs/supported-messages.md](docs/supported-messages.md)
+- Webhooks soportados: [docs/webhooks.md](docs/webhooks.md)
+
 ## Dependency Injection
 
 ```csharp
@@ -13,7 +20,7 @@ public MessagesController(IWhatsAppBusinessClient businessClient)
 
 ## Outbound Messages (Builder API)
 
-### Simple text message
+### Text
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -28,22 +35,26 @@ var message = WhatsAppMessageBuilder
 var result = await _businessClient.SendMessage(message);
 ```
 
-### Location message
+### Upload media + send image by media id
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
 
-var message = WhatsAppMessageBuilder
+using var file = File.OpenRead("./assets/image.png");
+var mediaId = await _businessClient.UploadMedia(file, "image.png", "image/png");
+
+var imageMessage = WhatsAppMessageBuilder
     .Text
-    .Location()
+    .Image()
     .To("+1111111111")
-    .WithLocation(-64.188579m, -31.420807m, "Stele", "Av. Hipolito Yrigoyen 12-66")
+    .WithImageId(mediaId!)
+    .WithCaption("Imagen subida via media endpoint")
     .Build();
 
-var result = await _businessClient.SendMessage(message);
+var result = await _businessClient.SendMessage(imageMessage);
 ```
 
-### Document message
+### Document
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -58,7 +69,22 @@ var message = WhatsAppMessageBuilder
 var result = await _businessClient.SendMessage(message);
 ```
 
-### Interactive buttons message
+### Location
+
+```csharp
+using WhatsAppBussinesApi.Dotnet.Builders;
+
+var message = WhatsAppMessageBuilder
+    .Text
+    .Location()
+    .To("+1111111111")
+    .WithLocation(-64.188579m, -31.420807m, "Stele", "Av. Hipolito Yrigoyen 12-66")
+    .Build();
+
+var result = await _businessClient.SendMessage(message);
+```
+
+### Interactive buttons (reply)
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -67,15 +93,15 @@ var message = WhatsAppMessageBuilder
     .Text
     .InteractiveButtons()
     .To("+669546669")
-    .WithBody("Test interactive message")
-    .AddReplyButton("user_123asd", "View User")
-    .AddReplyButton("re_send_21f12", "Re-send confirmation")
+    .WithBody("Selecciona una opcion")
+    .AddReplyButton("user_123asd", "Ver usuario")
+    .AddReplyButton("re_send_21f12", "Reenviar")
     .Build();
 
 var result = await _businessClient.SendMessage(message);
 ```
 
-### Interactive list message
+### Interactive list
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -94,6 +120,38 @@ var message = WhatsAppMessageBuilder
     .WithBody("Example interactive list message")
     .WithButtonLabel("View options")
     .AddSection("Main options", rows)
+    .Build();
+
+var result = await _businessClient.SendMessage(message);
+```
+
+### Interactive CTA URL
+
+```csharp
+using WhatsAppBussinesApi.Dotnet.Builders;
+
+var message = WhatsAppMessageBuilder
+    .Text
+    .InteractiveCtaUrl()
+    .To("+541111111111")
+    .WithBody("Conoce la beta 2.1.0")
+    .WithDisplayText("Ver release")
+    .WithUrl("https://github.com/Exequiel65/WhatsAppBussinesApi.Dotnet")
+    .Build();
+
+var result = await _businessClient.SendMessage(message);
+```
+
+### Request location
+
+```csharp
+using WhatsAppBussinesApi.Dotnet.Builders;
+
+var message = WhatsAppMessageBuilder
+    .Text
+    .InteractiveLocation()
+    .To("+541111111111")
+    .WithBody("Comparte tu ubicacion actual")
     .Build();
 
 var result = await _businessClient.SendMessage(message);
@@ -136,7 +194,7 @@ var message = WhatsAppMessageBuilder
 var result = await _businessClient.SendMessage(message);
 ```
 
-### Header image + interactions
+### Header image + URL button
 
 ```csharp
 using WhatsAppBussinesApi.Dotnet.Builders;
@@ -155,7 +213,7 @@ var message = WhatsAppMessageBuilder
 var result = await _businessClient.SendMessage(message);
 ```
 
-## Webhook: JSON to Class + Interpretation
+## Webhook: JSON to class + parser
 
 ```csharp
 using System.Text.Json;
@@ -170,19 +228,15 @@ public IActionResult ReceiveWebhook([FromBody] JsonElement payload)
         return BadRequest("Invalid webhook payload");
     }
 
-    var incomingTextMessages = WhatsAppWebhookParser.ExtractIncomingTextMessages(webhook);
-    var statusUpdates = WhatsAppWebhookParser.ExtractStatusMessages(webhook);
+    var incomingText = WhatsAppWebhookParser.ExtractIncomingTextMessages(webhook);
+    var incomingLocation = WhatsAppWebhookParser.ExtractIncomingLocationMessages(webhook);
+    var statuses = WhatsAppWebhookParser.ExtractStatusMessages(webhook);
 
-    foreach (var message in incomingTextMessages)
+    return Ok(new
     {
-        // message.Body, message.From, message.Timestamp, etc.
-    }
-
-    foreach (var status in statusUpdates)
-    {
-        // status.MessageId, status.Status, status.Timestamp, etc.
-    }
-
-    return Ok();
+        IncomingText = incomingText.Count,
+        IncomingLocation = incomingLocation.Count,
+        OutgoingStatuses = statuses.Count
+    });
 }
 ```

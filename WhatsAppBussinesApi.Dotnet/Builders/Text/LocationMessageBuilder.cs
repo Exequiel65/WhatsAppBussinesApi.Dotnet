@@ -19,7 +19,7 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             return this;
         }
 
-        public LocationMessageBuilder WithLocation(decimal longitude, decimal latitude, string name, string address)
+        public LocationMessageBuilder WithLocation(decimal longitude, decimal latitude, string? name = null, string? address = null)
         {
             _location = new LocationComponent
             {
@@ -41,6 +41,16 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             if (_location is null)
             {
                 throw new InvalidOperationException("Location payload is required.");
+            }
+
+            if (_location.latitude < -90 || _location.latitude > 90)
+            {
+                throw new InvalidOperationException("Latitude must be between -90 and 90.");
+            }
+
+            if (_location.longitude < -180 || _location.longitude > 180)
+            {
+                throw new InvalidOperationException("Longitude must be between -180 and 180.");
             }
 
             return new LocationMessage
