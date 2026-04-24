@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Diagnostics.CodeAnalysis;
 using JsonIgnoreCondition = System.Text.Json.Serialization;
-namespace WhatsAppBussinesApi.Dotnet.Structure.Text
+namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
 {
     public class InteractiveButtonsMessage : BaseMessage
     {
@@ -38,11 +38,11 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
     public class InteractiveComponent
     {
         public InteractiveType type { get; } = InteractiveType.button;
-        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnoreCondition.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
         public BaseHeader header { get; set; }
 
         public BaseBody body { get; set; }
-        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnoreCondition.JsonIgnore(Condition = JsonIgnoreCondition.JsonIgnoreCondition.WhenWritingNull)]
         public FooterText footer { get; set; }
 
         public BaseAction action { get; set; }

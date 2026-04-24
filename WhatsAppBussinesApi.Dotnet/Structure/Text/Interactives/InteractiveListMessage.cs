@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WhatsAppBussinesApi.Dotnet.Structure.Text
+namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
 {
     public class InteractiveListMessage : BaseMessage
     {

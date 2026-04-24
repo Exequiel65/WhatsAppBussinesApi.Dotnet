@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace WhatsAppBussinesApi.Dotnet.Structure.Text
+namespace WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives
 {
     #region Header
     public class BaseHeader

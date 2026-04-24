@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 {
@@ -19,10 +20,10 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         }
 
         [SetsRequiredMembers]
-        public StickerMessage(string to, string link, string providerName)
+        public StickerMessage(string to, Uri link)
         {
             this.to = to ?? throw new ArgumentNullException(nameof(to));
-            sticker = new StickerComponent(link, providerName);
+            sticker = new StickerComponentWithLink(link?.ToString() ?? throw new ArgumentNullException(nameof(link)));
         }
 
         [SetsRequiredMembers]
@@ -33,32 +34,31 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
         }
     }
 
-    public class BaseSticker { }
-
-    public class StickerComponent : BaseSticker
+    public class BaseSticker
     {
-        public string link { get; set; }
-        public BaseProvider provider { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? id { get; set; }
 
-        public StickerComponent() { }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? link { get; set; }
+    }
 
-        public StickerComponent(string link, string providerName)
+    public class StickerComponentWithLink : BaseSticker
+    {
+        public StickerComponentWithLink()
         {
-            this.link = link;
-            this.provider = new BaseProvider(providerName);
         }
 
-        public StickerComponent(string link, BaseProvider provider)
+        public StickerComponentWithLink(string link)
         {
-            this.link = link;
-            this.provider = provider;
+            this.link = string.IsNullOrWhiteSpace(link)
+                ? throw new ArgumentException("Sticker link cannot be empty", nameof(link))
+                : link;
         }
     }
 
     public class StickerComponentWithId : BaseSticker
     {
-        public string id { get; set; }
-
         public StickerComponentWithId()
         {
 
@@ -66,7 +66,9 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Text
 
         public StickerComponentWithId(string id)
         {
-            this.id = id;
+            this.id = string.IsNullOrWhiteSpace(id)
+                ? throw new ArgumentException("Sticker id cannot be empty", nameof(id))
+                : id;
         }
     }
 

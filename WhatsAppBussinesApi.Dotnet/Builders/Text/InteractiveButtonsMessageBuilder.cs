@@ -1,4 +1,4 @@
-using WhatsAppBussinesApi.Dotnet.Structure.Text;
+using WhatsAppBussinesApi.Dotnet.Structure.Text.Interactives;
 
 namespace WhatsAppBussinesApi.Dotnet.Builders.Text
 {

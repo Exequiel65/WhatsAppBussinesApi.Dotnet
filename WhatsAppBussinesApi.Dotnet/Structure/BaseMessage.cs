@@ -15,6 +15,7 @@ namespace WhatsAppBussinesApi.Dotnet.Structure
         location,
         sticker,
         video,
+        reaction,
         interactive,
         location_request_message
     }

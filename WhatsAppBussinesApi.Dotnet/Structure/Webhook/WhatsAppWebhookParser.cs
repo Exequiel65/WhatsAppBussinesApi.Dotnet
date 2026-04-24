@@ -78,6 +78,66 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Webhook
             return result;
         }
 
+        public static IReadOnlyList<IncomingLocationMessage> ExtractIncomingLocationMessages(WhatsAppWebhook webhook)
+        {
+            if (webhook is null)
+            {
+                throw new ArgumentNullException(nameof(webhook));
+            }
+
+            var result = new List<IncomingLocationMessage>();
+
+            foreach (var entry in webhook.Entry)
+            {
+                foreach (var change in entry.Changes)
+                {
+                    if (!string.Equals(change.Field, "messages", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    var value = change.Value;
+                    if (value is null)
+                    {
+                        continue;
+                    }
+
+                    var contactsByWaId = value.Contacts
+                        .Where(c => !string.IsNullOrWhiteSpace(c.WaId))
+                        .ToDictionary(c => c.WaId!, c => c);
+
+                    foreach (var message in value.Messages)
+                    {
+                        if (!string.Equals(message.Type, "location", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        contactsByWaId.TryGetValue(message.From ?? string.Empty, out var contact);
+
+                        result.Add(new IncomingLocationMessage
+                        {
+                            BusinessPhoneNumberId = value.Metadata?.PhoneNumberId,
+                            BusinessDisplayPhoneNumber = value.Metadata?.DisplayPhoneNumber,
+                            From = message.From,
+                            ContactName = contact?.Profile?.Name,
+                            ContactWaId = contact?.WaId,
+                            MessageId = message.Id,
+                            ContextFrom = message.Context?.From,
+                            ContextMessageId = message.Context?.Id,
+                            Address = message.Location?.Address,
+                            Name = message.Location?.Name,
+                            Latitude = message.Location?.Latitude,
+                            Longitude = message.Location?.Longitude,
+                            Timestamp = ParseUnixTimestamp(message.Timestamp)
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static IReadOnlyList<OutgoingStatusMessage> ExtractStatusMessages(WhatsAppWebhook webhook)
         {
             if (webhook is null)
@@ -182,5 +242,22 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Webhook
         public string? PricingModel { get; init; }
         public string? PricingCategory { get; init; }
         public string? PricingType { get; init; }
+    }
+
+    public sealed class IncomingLocationMessage
+    {
+        public string? BusinessPhoneNumberId { get; init; }
+        public string? BusinessDisplayPhoneNumber { get; init; }
+        public string? From { get; init; }
+        public string? ContactWaId { get; init; }
+        public string? ContactName { get; init; }
+        public string? MessageId { get; init; }
+        public string? ContextFrom { get; init; }
+        public string? ContextMessageId { get; init; }
+        public string? Address { get; init; }
+        public string? Name { get; init; }
+        public decimal? Latitude { get; init; }
+        public decimal? Longitude { get; init; }
+        public DateTimeOffset? Timestamp { get; init; }
     }
 }

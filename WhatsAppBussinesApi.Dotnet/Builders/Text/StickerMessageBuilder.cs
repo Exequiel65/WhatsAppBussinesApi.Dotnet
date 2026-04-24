@@ -25,9 +25,9 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             return this;
         }
 
-        public StickerMessageBuilder WithStickerLink(string link, string providerName)
+        public StickerMessageBuilder WithStickerLink(string link)
         {
-            _sticker = new StickerComponent(link, providerName);
+            _sticker = new StickerComponentWithLink(link);
             return this;
         }
 
@@ -41,6 +41,16 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
             if (_sticker is null)
             {
                 throw new InvalidOperationException("Sticker payload is required.");
+            }
+
+            if (_sticker is StickerComponentWithId idSticker && string.IsNullOrWhiteSpace(idSticker.id))
+            {
+                throw new InvalidOperationException("Sticker id is required when using id payload.");
+            }
+
+            if (_sticker is StickerComponentWithLink linkSticker && string.IsNullOrWhiteSpace(linkSticker.link))
+            {
+                throw new InvalidOperationException("Sticker link is required when using link payload.");
             }
 
             return new StickerMessage
