@@ -1,7 +1,8 @@
 using WhatsAppBussinesApi.Dotnet.Structure.Templates;
 using WhatsAppBussinesApi.Dotnet.Structure;
+using WhatsAppBussinesApi.Dotnet.Builders.Text;
 
-namespace WhatsAppBussinesApi.Dotnet.Builders.Text
+namespace WhatsAppBussinesApi.Dotnet.Builders
 {
     public sealed class TemplateTextMessageBuilder : IMessageBuilder<TemplateTextMessage>
     {
@@ -39,6 +40,11 @@ namespace WhatsAppBussinesApi.Dotnet.Builders.Text
         public TemplateTextMessageBuilder AddBodyTextParameter(string text)
         {
             return AddBodyParameter(new ParameterText(text));
+        }
+
+        public TemplateTextMessageBuilder AddBodyTextParameter(string parameterName, string text)
+        {
+            return AddBodyParameter(new ParameterText(parameterName, text));
         }
 
         public TemplateTextMessageBuilder AddBodyCurrencyParameter(string fallbackValue, string code, decimal amount)

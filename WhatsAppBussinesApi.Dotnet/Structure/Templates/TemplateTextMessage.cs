@@ -73,11 +73,19 @@ namespace WhatsAppBussinesApi.Dotnet.Structure.Templates
     public class ParameterText : BaseParameters
     {
         public override string type { get; set; } = "text";
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? parameter_name { get; set; }
         public string text { get; set; }
 
         public ParameterText() { }
         public ParameterText(string text)
         {
+            this.text = text;
+        }
+
+        public ParameterText(string parameterName, string text)
+        {
+            this.parameter_name = parameterName;
             this.text = text;
         }
     }
